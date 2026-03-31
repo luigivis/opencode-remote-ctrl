@@ -45,7 +45,7 @@ function installOpenCode() {
   
   try {
     console.log(color('Installing OpenCode...', 'c'));
-    execSync('curl -fsSL https://opencode.ai/install | sh', { stdio: 'inherit' });
+    execSync('curl -fsSL https://opencode.ai/install | bash', { stdio: 'inherit' });
     
     if (isOpenCodeInstalled()) {
       console.log(color('✓ OpenCode installed successfully!', 'g'));
@@ -56,7 +56,7 @@ function installOpenCode() {
     }
   } catch (error) {
     console.log(color('✗ Installation failed. Please install manually:', 'r'));
-    console.log(color('curl -fsSL https://opencode.ai/install | sh', 'b'));
+    console.log(color('curl -fsSL https://opencode.ai/install | bash', 'b'));
     return false;
   }
 }
