@@ -60,3 +60,12 @@ export function isTailscaleInstalled() {
     return false;
   }
 }
+
+export function installTailscale() {
+  try {
+    execSync('curl -fsSL https://tailscale.com/install.sh | sh', { stdio: 'inherit' });
+    return isTailscaleInstalled();
+  } catch {
+    return false;
+  }
+}

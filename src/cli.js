@@ -10,7 +10,7 @@ import {
   uninstallService,
   isSystemdUserServiceInstalled,
 } from './service.js';
-import { getNetworkInfo, isTailscaleInstalled } from './tailscale.js';
+import { getNetworkInfo, isTailscaleInstalled, installTailscale } from './tailscale.js';
 import { WebUI } from './web-ui.js';
 
 const args = process.argv.slice(2);
@@ -89,6 +89,32 @@ function ensureOpenCodeInstalled() {
   
   console.log(color('Installation cancelled. Please install OpenCode manually:', 'y'));
   console.log(color('curl -fsSL https://opencode.ai/install | sh', 'b'));
+  return false;
+}
+
+function ensureTailscaleInstalled() {
+  if (isTailscaleInstalled()) {
+    return true;
+  }
+  
+  console.log('');
+  console.log(color('━━━ Tailscale Required ━━━', 'bold'));
+  console.log('');
+  console.log('Tailscale is needed for remote access from your phone.');
+  console.log('');
+  console.log(color('━━━ Auto-install Tailscale? ━━━', 'bold'));
+  console.log('');
+  
+  try {
+    const response = execSync('echo "y"', { encoding: 'utf-8' }).trim();
+    
+    if (response.toLowerCase() === 'y' || response === '') {
+      return installTailscale();
+    }
+  } catch {}
+  
+  console.log(color('Installation cancelled. Please install Tailscale manually:', 'y'));
+  console.log(color('curl -fsSL https://tailscale.com/install.sh | sh', 'b'));
   return false;
 }
 
@@ -182,9 +208,8 @@ function cmdStart() {
     console.log(color('⚠ Warning: No password set. Run "opencode-remote config" to set a password.', 'y'));
   }
   
-  const tailscale_installed = isTailscaleInstalled();
-  if (!tailscale_installed) {
-    console.log(color('⚠ Tailscale not detected. Remote access may not work.', 'y'));
+  if (!ensureTailscaleInstalled()) {
+    console.log(color('⚠ Tailscale not installed. Remote access will not work.', 'y'));
   }
   
   const success = startService();
