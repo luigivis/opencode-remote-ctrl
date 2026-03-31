@@ -1,7 +1,12 @@
 {
   "name": "opencode-remote-ctrl",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CLI tool to manage opencode web as a background service with web UI configuration and Tailscale integration",
+  "homepage": "https://github.com/luigivis/opencode-remote-ctrl#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luigivis/opencode-remote-ctrl"
+  },
   "type": "module",
   "bin": {
     "opencode-remote-ctrl": "./dist/index.js"
