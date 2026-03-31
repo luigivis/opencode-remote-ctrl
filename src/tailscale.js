@@ -1,24 +1,12 @@
 import { execSync } from 'child_process';
-import { echo } from 'zx';
 
-export interface TailscaleInfo {
-  ip: string | null;
-  hostname: string | null;
-  isConnected: boolean;
-}
-
-export interface NetworkInfo {
-  tailscale: TailscaleInfo;
-  localIp: string | null;
-}
-
-export async function getTailscaleInfo(): Promise<TailscaleInfo> {
+export async function getTailscaleInfo() {
   try {
     const output = execSync('tailscale status --json 2>/dev/null', { encoding: 'utf-8' });
     const status = JSON.parse(output);
     
     const self = status.Self;
-    if (self && self.CurredAddr) {
+    if (self && self.CurrAddr) {
       return {
         ip: self.CurrAddr.replace(/:.*$/, ''),
         hostname: self.HostName,
@@ -36,12 +24,12 @@ export async function getTailscaleInfo(): Promise<TailscaleInfo> {
   };
 }
 
-export async function getTailscaleIP(): Promise<string | null> {
+export async function getTailscaleIP() {
   const info = await getTailscaleInfo();
   return info.ip;
 }
 
-export async function getLocalIP(): Promise<string | null> {
+export async function getLocalIP() {
   try {
     const output = execSync("ip route get 1 | awk '{print $6; exit}' 2>/dev/null || hostname -I | awk '{print $1}'", { encoding: 'utf-8' });
     return output.trim() || null;
@@ -55,7 +43,7 @@ export async function getLocalIP(): Promise<string | null> {
   }
 }
 
-export async function getNetworkInfo(): Promise<NetworkInfo> {
+export async function getNetworkInfo() {
   const [tailscale, localIp] = await Promise.all([
     getTailscaleInfo(),
     getLocalIP(),
@@ -64,7 +52,7 @@ export async function getNetworkInfo(): Promise<NetworkInfo> {
   return { tailscale, localIp };
 }
 
-export function isTailscaleInstalled(): boolean {
+export function isTailscaleInstalled() {
   try {
     execSync('which tailscale', { stdio: 'ignore' });
     return true;

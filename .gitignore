@@ -1,24 +1,3 @@
-# Dependencies
 node_modules/
-
-# Build output
-dist/
-
-# Logs
-*.log
-
-# OS files
 .DS_Store
-Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-
-# Environment
-.env
-.env.local
-
-# Config (keep this if you want to exclude personal config)
-# ~/.config/opencode-remote/config.json
-.npmrc
+*.log
