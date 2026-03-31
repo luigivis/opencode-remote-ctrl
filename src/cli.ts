@@ -13,7 +13,7 @@ import {
 } from './service.js';
 import { getNetworkInfo, isTailscaleInstalled } from './tailscale.js';
 import { WebUI } from './web-ui.js';
-import { open } from 'child_process';
+import { execSync } from 'child_process';
 
 const args = process.argv.slice(2);
 const command = args[0];
@@ -156,9 +156,10 @@ async function cmdConfig(): Promise<void> {
   
   await webUI.start();
   
-  // Try to open browser automatically
+  // Try to open browser automatically (optional)
   try {
-    open(`http://localhost:${config.port}`);
+    const browserCmd = process.platform === 'darwin' ? 'open' : 'xdg-open';
+    execSync(`${browserCmd} http://localhost:${config.port}`, { stdio: 'ignore' });
   } catch {
     // Ignore if can't open browser
   }

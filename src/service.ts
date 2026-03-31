@@ -75,7 +75,7 @@ export function uninstallService(): boolean {
     const servicePath = join(serviceDir, `${SERVICE_NAME}.service`);
     
     if (existsSync(servicePath)) {
-      execSync('systemctl --user stop ${SERVICE_NAME} 2>/dev/null', { stdio: 'ignore' });
+      execSync(`systemctl --user stop ${SERVICE_NAME} 2>/dev/null`, { stdio: 'ignore' });
       execSync(`rm -f "${servicePath}"`, { stdio: 'ignore' });
       execSync('systemctl --user daemon-reload', { stdio: 'ignore' });
     }
@@ -94,8 +94,8 @@ export function startService(): boolean {
       installService();
     }
     
-    execSync('systemctl --user start ${SERVICE_NAME}', { stdio: 'ignore' });
-    execSync('systemctl --user enable ${SERVICE_NAME}', { stdio: 'ignore' });
+    execSync(`systemctl --user start ${SERVICE_NAME}`, { stdio: 'ignore' });
+    execSync(`systemctl --user enable ${SERVICE_NAME}`, { stdio: 'ignore' });
     
     echo`${'{green'}✓{/green} Service started`;
     return true;
@@ -107,7 +107,7 @@ export function startService(): boolean {
 
 export function stopService(): boolean {
   try {
-    execSync('systemctl --user stop ${SERVICE_NAME} 2>/dev/null', { stdio: 'ignore' });
+    execSync(`systemctl --user stop ${SERVICE_NAME} 2>/dev/null`, { stdio: 'ignore' });
     echo`${'{green'}✓{/green} Service stopped`;
     return true;
   } catch (error) {
@@ -118,7 +118,7 @@ export function stopService(): boolean {
 
 export function restartService(): boolean {
   try {
-    execSync('systemctl --user restart ${SERVICE_NAME}', { stdio: 'ignore' });
+    execSync(`systemctl --user restart ${SERVICE_NAME}`, { stdio: 'ignore' });
     echo`${'{green'}✓{/green} Service restarted`;
     return true;
   } catch (error) {
@@ -139,10 +139,10 @@ export function getServiceStatus(): ServiceStatus {
     status.isInstalled = isSystemdUserServiceInstalled();
     
     if (status.isInstalled) {
-      const activeOutput = execSync('systemctl --user is-active ${SERVICE_NAME} 2>/dev/null', { encoding: 'utf-8' });
+      const activeOutput = execSync(`systemctl --user is-active ${SERVICE_NAME} 2>/dev/null`, { encoding: 'utf-8' });
       status.isActive = activeOutput.trim() === 'active';
       
-      const runningOutput = execSync('systemctl --user is-enabled ${SERVICE_NAME} 2>/dev/null', { encoding: 'utf-8' });
+      const runningOutput = execSync(`systemctl --user is-enabled ${SERVICE_NAME} 2>/dev/null`, { encoding: 'utf-8' });
       status.isRunning = runningOutput.trim() === 'enabled';
     }
   } catch {
@@ -158,7 +158,7 @@ export async function showServiceStatus(): Promise<void> {
   const tailscaleIP = await getTailscaleIP();
   
   echo`
-${'{cyan'}┌─────────────────────────────────────────�{/cyan}┐
+${'{cyan'}┌─────────────────────────────────────────┐
 ${'{cyan'}│{/cyan}    opencode-remote Status                 ${'{cyan'}│{/cyan}
 ${'{cyan'}└─────────────────────────────────────────┘{/cyan}
 `;
