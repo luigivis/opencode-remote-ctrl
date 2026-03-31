@@ -1,4 +1,4 @@
-# opencode-remote
+# opencode-remote-ctrl
 
 A CLI tool to manage [OpenCode](https://opencode.ai) as a background service with a web UI for configuration and Tailscale integration for remote access.
 
@@ -23,17 +23,17 @@ A CLI tool to manage [OpenCode](https://opencode.ai) as a background service wit
 ### From Source
 
 ```bash
-git clone https://github.com/luigivis/opencode-remote.git
-cd opencode-remote
+git clone https://github.com/luigivis/opencode-remote-ctrl.git
+cd opencode-remote-ctrl
 bun install
 bun run build
-sudo ln -s "$(pwd)/dist/index.js" /usr/local/bin/opencode-remote
+sudo ln -s "$(pwd)/dist/index.js" /usr/local/bin/opencode-remote-ctrl
 ```
 
 ### Quick Install (Bun)
 
 ```bash
-bun install -g opencode-remote
+bun install -g opencode-remote-ctrl
 ```
 
 ## Usage
@@ -42,41 +42,41 @@ bun install -g opencode-remote
 
 ```bash
 # Start the service
-opencode-remote start
+opencode-remote-ctrl start
 
 # Check status
-opencode-remote status
+opencode-remote-ctrl status
 
 # Open configuration UI
-opencode-remote config
+opencode-remote-ctrl config
 
 # Stop the service
-opencode-remote stop
+opencode-remote-ctrl stop
 
 # Restart the service
-opencode-remote restart
+opencode-remote-ctrl restart
 
 # Show help
-opencode-remote help
+opencode-remote-ctrl help
 ```
 
 ### First-Time Setup
 
 1. **Start the service:**
    ```bash
-   opencode-remote start
+   opencode-remote-ctrl start
    ```
 
 2. **Open the configuration UI:**
    ```bash
-   opencode-remote config
+   opencode-remote-ctrl config
    ```
 
 3. **Set your password** in the web UI at `http://localhost:4097`
 
 4. **Enable auto-start** (optional):
    ```bash
-   opencode-remote install-service
+   opencode-remote-ctrl install-service
    ```
 
 ### Remote Access with Tailscale
@@ -87,7 +87,7 @@ If you have Tailscale installed on both your computer and phone:
 
 2. **Start the service:**
    ```bash
-   opencode-remote start
+   opencode-remote-ctrl start
    ```
 
 3. **Get your Tailscale IP:**
@@ -104,7 +104,7 @@ If you have Tailscale installed on both your computer and phone:
 
 ## Configuration
 
-Configuration is stored at `~/.config/opencode-remote/config.json`
+Configuration is stored at `~/.config/opencode-remote-ctrl/config.json`
 
 ### Web UI Configuration
 
@@ -121,7 +121,7 @@ Access the web UI at `http://localhost:4097`:
 
 ### Manual Configuration
 
-You can also edit `~/.config/opencode-remote/config.json` directly:
+You can also edit `~/.config/opencode-remote-ctrl/config.json` directly:
 
 ```json
 {
@@ -152,41 +152,41 @@ The tool can install itself as a systemd user service for automatic startup:
 ### Install Service
 
 ```bash
-opencode-remote install-service
+opencode-remote-ctrl install-service
 ```
 
 ### Uninstall Service
 
 ```bash
-opencode-remote uninstall-service
+opencode-remote-ctrl uninstall-service
 ```
 
 ### Manual Service Management
 
 ```bash
-systemctl --user start opencode-remote
-systemctl --user stop opencode-remote
-systemctl --user restart opencode-remote
-systemctl --user status opencode-remote
+systemctl --user start opencode-remote-ctrl
+systemctl --user stop opencode-remote-ctrl
+systemctl --user restart opencode-remote-ctrl
+systemctl --user status opencode-remote-ctrl
 ```
 
 ## Logs
 
 Service logs are stored at:
 ```
-~/.local/share/opencode-remote/service.log
+~/.local/share/opencode-remote-ctrl/service.log
 ```
 
 View logs:
 ```bash
-tail -f ~/.local/share/opencode-remote/service.log
+tail -f ~/.local/share/opencode-remote-ctrl/service.log
 ```
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    opencode-remote                       │
+│                    opencode-remote-ctrl                       │
 ├─────────────────────────────────────────────────────────┤
 │                                                          │
 │  ┌──────────────┐    ┌──────────────┐    ┌────────────┐  │
@@ -198,7 +198,7 @@ tail -f ~/.local/share/opencode-remote/service.log
 │                             │                             │
 │              ┌──────────────┴──────────────┐              │
 │              │        Config Store        │              │
-│              │  ~/.config/opencode-remote/ │              │
+│              │  ~/.config/opencode-remote-ctrl/ │              │
 │              └─────────────────────────────┘              │
 │                             │                             │
 │         ┌───────────────────┼───────────────────┐         │
@@ -228,7 +228,7 @@ tail -f ~/.local/share/opencode-remote/service.log
 
 2. Check service logs:
    ```bash
-   tail -f ~/.local/share/opencode-remote/service.log
+   tail -f ~/.local/share/opencode-remote-ctrl/service.log
    ```
 
 3. Try starting manually:

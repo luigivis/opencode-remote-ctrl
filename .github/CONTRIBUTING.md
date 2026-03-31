@@ -1,4 +1,4 @@
-# Contributing to opencode-remote
+# Contributing to opencode-remote-ctrl
 
 Thank you for your interest in contributing!
 
@@ -6,8 +6,8 @@ Thank you for your interest in contributing!
 
 ```bash
 # Clone the repository
-git clone https://github.com/luigivis/opencode-remote.git
-cd opencode-remote
+git clone https://github.com/luigivis/opencode-remote-ctrl.git
+cd opencode-remote-ctrl
 
 # Install dependencies
 bun install
@@ -22,7 +22,7 @@ bun run build
 ## Project Structure
 
 ```
-opencode-remote/
+opencode-remote-ctrl/
 ├── src/
 │   ├── cli.ts        # CLI command handlers
 │   ├── config.ts     # Configuration management

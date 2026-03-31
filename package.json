@@ -1,10 +1,10 @@
 {
-  "name": "opencode-remote",
+  "name": "opencode-remote-ctrl",
   "version": "1.0.0",
   "description": "CLI tool to manage opencode web as a background service with web UI configuration and Tailscale integration",
   "type": "module",
   "bin": {
-    "opencode-remote": "./dist/index.js"
+    "opencode-remote-ctrl": "./dist/index.js"
   },
   "scripts": {
     "build": "bun build src/index.ts --outdir=dist --target=bun",

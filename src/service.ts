@@ -5,7 +5,7 @@ import { echo } from 'zx';
 import { loadConfig, getLogFile, getLogsDir } from './config.js';
 import { getTailscaleIP } from './tailscale.js';
 
-const SERVICE_NAME = 'opencode-remote';
+const SERVICE_NAME = 'opencode-remote-ctrl';
 const SERVICE_FILE = join(getLogsDir(), `${SERVICE_NAME}.service`);
 
 interface ServiceStatus {

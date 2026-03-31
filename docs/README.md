@@ -1,8 +1,8 @@
-# opencode-remote Documentation
+# opencode-remote-ctrl Documentation
 
 ## Overview
 
-**opencode-remote** is a management tool for [OpenCode](https://opencode.ai) that allows you to:
+**opencode-remote-ctrl** is a management tool for [OpenCode](https://opencode.ai) that allows you to:
 
 1. Run OpenCode's web interface as a persistent background service
 2. Access it remotely from any device (phone, tablet, other computer)
@@ -34,8 +34,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/luigivis/opencode-remote.git
-cd opencode-remote
+git clone https://github.com/luigivis/opencode-remote-ctrl.git
+cd opencode-remote-ctrl
 
 # Install dependencies
 bun install
@@ -44,7 +44,7 @@ bun install
 bun run build
 
 # Link globally (optional)
-ln -s "$(pwd)/dist/index.js" /usr/local/bin/opencode-remote
+ln -s "$(pwd)/dist/index.js" /usr/local/bin/opencode-remote-ctrl
 ```
 
 ---
@@ -55,10 +55,10 @@ ln -s "$(pwd)/dist/index.js" /usr/local/bin/opencode-remote
 
 ```bash
 # Start the service
-opencode-remote start
+opencode-remote-ctrl start
 
 # Open the web configuration UI
-opencode-remote config
+opencode-remote-ctrl config
 ```
 
 Navigate to `http://localhost:4097` in your browser and set a password.
@@ -81,7 +81,7 @@ Enter your password when prompted.
 ### 3. Enable Auto-Start
 
 ```bash
-opencode-remote install-service
+opencode-remote-ctrl install-service
 ```
 
 Now the service will automatically start whenever you log in.
@@ -92,7 +92,7 @@ Now the service will automatically start whenever you log in.
 
 ### Configuration File
 
-Location: `~/.config/opencode-remote/config.json`
+Location: `~/.config/opencode-remote-ctrl/config.json`
 
 ```json
 {
@@ -121,7 +121,7 @@ Location: `~/.config/opencode-remote/config.json`
 The easiest way to configure is via the web UI:
 
 ```bash
-opencode-remote config
+opencode-remote-ctrl config
 ```
 
 Then open `http://localhost:4097` in your browser.
@@ -201,13 +201,13 @@ ssh -L 4096:localhost:4096 user@your-computer
 ### Command Reference
 
 ```bash
-opencode-remote start              # Start the service
-opencode-remote stop               # Stop the service
-opencode-remote restart           # Restart the service
-opencode-remote status            # Show status and URLs
-opencode-remote config            # Open configuration UI
-opencode-remote install-service   # Enable auto-start
-opencode-remote uninstall-service # Disable auto-start
+opencode-remote-ctrl start              # Start the service
+opencode-remote-ctrl stop               # Stop the service
+opencode-remote-ctrl restart           # Restart the service
+opencode-remote-ctrl status            # Show status and URLs
+opencode-remote-ctrl config            # Open configuration UI
+opencode-remote-ctrl install-service   # Enable auto-start
+opencode-remote-ctrl uninstall-service # Disable auto-start
 ```
 
 ### Systemd Service
@@ -218,22 +218,22 @@ The tool installs as a systemd user service.
 
 ```bash
 # Start
-systemctl --user start opencode-remote
+systemctl --user start opencode-remote-ctrl
 
 # Stop
-systemctl --user stop opencode-remote
+systemctl --user stop opencode-remote-ctrl
 
 # Restart
-systemctl --user restart opencode-remote
+systemctl --user restart opencode-remote-ctrl
 
 # Status
-systemctl --user status opencode-remote
+systemctl --user status opencode-remote-ctrl
 
 # Enable on boot
-systemctl --user enable opencode-remote
+systemctl --user enable opencode-remote-ctrl
 
 # Disable on boot
-systemctl --user disable opencode-remote
+systemctl --user disable opencode-remote-ctrl
 ```
 
 ### Logs
@@ -241,10 +241,10 @@ systemctl --user disable opencode-remote
 View service logs:
 ```bash
 # Follow logs in real-time
-tail -f ~/.local/share/opencode-remote/service.log
+tail -f ~/.local/share/opencode-remote-ctrl/service.log
 
 # View last 100 lines
-tail -100 ~/.local/share/opencode-remote/service.log
+tail -100 ~/.local/share/opencode-remote-ctrl/service.log
 ```
 
 ---
@@ -265,7 +265,7 @@ Returns current configuration.
   "autoStart": true,
   "hostname": "0.0.0.0",
   "tailscaleOnly": false,
-  "configPath": "/home/user/.config/opencode-remote/config.json"
+  "configPath": "/home/user/.config/opencode-remote-ctrl/config.json"
 }
 ```
 
@@ -330,7 +330,7 @@ Restarts the systemd service.
 
 3. **View logs:**
    ```bash
-   tail -f ~/.local/share/opencode-remote/service.log
+   tail -f ~/.local/share/opencode-remote-ctrl/service.log
    ```
 
 4. **Try starting OpenCode manually:**
@@ -365,7 +365,7 @@ Restarts the systemd service.
 2. Clear browser cache/cookies
 3. Check password in config file:
    ```bash
-   cat ~/.config/opencode-remote/config.json
+   cat ~/.config/opencode-remote-ctrl/config.json
    ```
 
 ### Config UI Won't Load
@@ -381,13 +381,13 @@ Restarts the systemd service.
 ## Architecture
 
 ```
-opencode-remote
+opencode-remote-ctrl
 │
 ├── CLI Interface (cli.ts)
 │   └── Commands: start, stop, status, config, install-service
 │
 ├── Configuration (config.ts)
-│   └── ~/.config/opencode-remote/config.json
+│   └── ~/.config/opencode-remote-ctrl/config.json
 │
 ├── Service Manager (service.ts)
 │   └── Systemd user service integration
@@ -428,7 +428,7 @@ Planned features:
 
 ## Support
 
-- **Issues:** https://github.com/luigivis/opencode-remote/issues
+- **Issues:** https://github.com/luigivis/opencode-remote-ctrl/issues
 - **GitHub:** [@luigivis](https://github.com/luigivis)
 
 ---
