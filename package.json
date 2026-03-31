@@ -1,0 +1,38 @@
+{
+  "name": "opencode-remote",
+  "version": "1.0.0",
+  "description": "CLI tool to manage opencode web as a background service with web UI configuration and Tailscale integration",
+  "type": "module",
+  "bin": {
+    "opencode-remote": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "bun build src/index.ts --outdir=dist --target=bun",
+    "dev": "bun run src/index.ts",
+    "start": "bun run src/index.ts start",
+    "stop": "bun run src/index.ts stop",
+    "status": "bun run src/index.ts status",
+    "restart": "bun run src/index.ts restart",
+    "config": "bun run src/index.ts config",
+    "install-service": "bun run src/index.ts install-service",
+    "uninstall-service": "bun run src/index.ts uninstall-service"
+  },
+  "keywords": [
+    "opencode",
+    "remote",
+    "tailscale",
+    "cli",
+    "web-ui"
+  ],
+  "author": "luigivis",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bun": "^1.0.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "env-paths": "^3.0.0",
+    "zx": "^8.0.0"
+  }
+}
