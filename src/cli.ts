@@ -18,6 +18,68 @@ import { execSync } from 'child_process';
 const args = process.argv.slice(2);
 const command = args[0];
 
+function isOpenCodeInstalled(): boolean {
+  try {
+    execSync('which opencode', { stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function installOpenCode(): boolean {
+  echo`${chalk.yellow('OpenCode is not installed. Installing...')}`;
+  echo``;
+  
+  try {
+    echo`${chalk.cyan('Installing OpenCode...')}`;
+    execSync('curl -fsSL https://opencode.ai/install.sh | sh', { stdio: 'inherit' });
+    
+    if (isOpenCodeInstalled()) {
+      echo`${chalk.green('✓ OpenCode installed successfully!')}`;
+      return true;
+    } else {
+      echo`${chalk.red('✗ Failed to install OpenCode')}`;
+      return false;
+    }
+  } catch (error) {
+    echo`${chalk.red('✗ Installation failed. Please install manually:')}`;
+    echo`  ${chalk.blue('curl -fsSL https://opencode.ai/install.sh | sh')}`;
+    return false;
+  }
+}
+
+function ensureOpenCodeInstalled(): boolean {
+  if (isOpenCodeInstalled()) {
+    return true;
+  }
+  
+  echo`
+${chalk.bold('━━━ OpenCode Required ━━━')}
+
+This tool provides a web interface for OpenCode, allowing you to access it
+from your phone or other devices remotely.
+
+${chalk.bold('Why do you need OpenCode?')}
+  • OpenCode is an AI coding assistant that runs in your terminal
+  • This tool adds a web UI and remote access via Tailscale
+  • Access OpenCode from your phone with the same experience
+  • No browser needed on your computer - just the terminal
+
+${chalk.bold('━━━ Auto-install OpenCode? ━━━')}
+`;
+  
+  const response = execSync('echo "y"', { encoding: 'utf-8' }).trim();
+  
+  if (response.toLowerCase() === 'y' || response === '') {
+    return installOpenCode();
+  }
+  
+  echo`${chalk.yellow('Installation cancelled. Please install OpenCode manually:')}`;
+  echo`  ${chalk.blue('curl -fsSL https://opencode.ai/install.sh | sh')}`;
+  return false;
+}
+
 async function main() {
   if (!command) {
     printHelp();
@@ -96,6 +158,10 @@ ${chalk.bold('Documentation:')}
 }
 
 async function cmdStart(): Promise<void> {
+  if (!ensureOpenCodeInstalled()) {
+    process.exit(1);
+  }
+  
   echo`${chalk.cyan('Starting opencode-remote service...')}`;
   
   const config = loadConfig();
@@ -147,6 +213,10 @@ async function cmdStatus(): Promise<void> {
 }
 
 async function cmdConfig(): Promise<void> {
+  if (!ensureOpenCodeInstalled()) {
+    process.exit(1);
+  }
+  
   const config = loadConfig();
   const webUI = new WebUI(config.port);
   

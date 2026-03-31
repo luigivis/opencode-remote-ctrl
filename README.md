@@ -2,6 +2,16 @@
 
 A CLI tool to manage [OpenCode](https://opencode.ai) as a background service with a web UI for configuration and Tailscale integration for remote access.
 
+## What is this?
+
+This tool adds a **web interface** to OpenCode, so you can access it from your phone, tablet, or any device remotely via Tailscale VPN.
+
+**Why would you want this?**
+- Access OpenCode's AI coding assistant from your phone
+- Same terminal experience, but from anywhere
+- No need to have a browser open on your computer
+- Share your coding session with others easily
+
 ## Features
 
 - 🌐 **Web UI** - Visual configuration panel for all settings
@@ -14,93 +24,85 @@ A CLI tool to manage [OpenCode](https://opencode.ai) as a background service wit
 
 ## Prerequisites
 
-- [OpenCode](https://opencode.ai) installed
 - [Tailscale](https://tailscale.com) installed (optional, for remote access)
 - Unix/Linux/macOS system
+- OpenCode (auto-installed if missing)
 
 ## Installation
 
-### From Source
-
 ```bash
-git clone https://github.com/luigivis/opencode-remote-ctrl.git
-cd opencode-remote-ctrl
-bun install
-bun run build
-sudo ln -s "$(pwd)/dist/index.js" /usr/local/bin/opencode-remote-ctrl
-```
-
-### Quick Install (Bun)
-
-```bash
-bun install -g opencode-remote-ctrl
+npm install -g opencode-remote-ctrl
 ```
 
 ## Usage
 
-### Basic Commands
+### Start the Service
 
 ```bash
-# Start the service
 opencode-remote-ctrl start
-
-# Check status
-opencode-remote-ctrl status
-
-# Open configuration UI
-opencode-remote-ctrl config
-
-# Stop the service
-opencode-remote-ctrl stop
-
-# Restart the service
-opencode-remote-ctrl restart
-
-# Show help
-opencode-remote-ctrl help
 ```
 
-### First-Time Setup
+The tool will:
+1. **Auto-install OpenCode** if not already installed
+2. Start OpenCode web interface
+3. Display access URLs
+
+### Check Status
+
+```bash
+opencode-remote-ctrl status
+```
+
+### Open Configuration UI
+
+```bash
+opencode-remote-ctrl config
+```
+
+### Other Commands
+
+```bash
+opencode-remote-ctrl stop          # Stop the service
+opencode-remote-ctrl restart       # Restart the service
+opencode-remote-ctrl install-service   # Enable auto-start on login
+opencode-remote-ctrl help          # Show help
+```
+
+## Remote Access with Tailscale
+
+If you have Tailscale installed on both your computer and phone:
 
 1. **Start the service:**
    ```bash
    opencode-remote-ctrl start
    ```
 
-2. **Open the configuration UI:**
-   ```bash
-   opencode-remote-ctrl config
-   ```
-
-3. **Set your password** in the web UI at `http://localhost:4097`
-
-4. **Enable auto-start** (optional):
-   ```bash
-   opencode-remote-ctrl install-service
-   ```
-
-### Remote Access with Tailscale
-
-If you have Tailscale installed on both your computer and phone:
-
-1. **Ensure Tailscale is running** on both devices and logged in with the same account
-
-2. **Start the service:**
-   ```bash
-   opencode-remote-ctrl start
-   ```
-
-3. **Get your Tailscale IP:**
+2. **Get your Tailscale IP:**
    ```bash
    tailscale ip
    ```
 
-4. **From your phone**, open the browser and go to:
+3. **From your phone**, open the browser and go to:
    ```
    http://<YOUR_TAILSCALE_IP>:4096
    ```
 
-5. **Enter your password** when prompted
+4. **Enter your password** when prompted
+
+## Why Tailscale?
+
+Tailscale creates a secure VPN between your devices:
+- Works from anywhere (not just local network)
+- End-to-end encrypted
+- No port forwarding needed
+- Free for personal use (up to 100 devices)
+
+## Auto-Installation
+
+If OpenCode is not installed, the tool will:
+1. Display information about what OpenCode is and why you need it
+2. Offer to auto-install it for you
+3. Run the official OpenCode installation script
 
 ## Configuration
 
@@ -119,21 +121,6 @@ Access the web UI at `http://localhost:4097`:
 | Auto-start | Start service on login | true |
 | Tailscale Only | Show only Tailscale IP in status | false |
 
-### Manual Configuration
-
-You can also edit `~/.config/opencode-remote-ctrl/config.json` directly:
-
-```json
-{
-  "port": 4097,
-  "opencodeWebPort": 4096,
-  "password": "your-secure-password",
-  "autoStart": true,
-  "hostname": "0.0.0.0",
-  "tailscaleOnly": false
-}
-```
-
 ## Access URLs
 
 When the service is running:
@@ -147,27 +134,10 @@ When the service is running:
 
 ## Systemd Service
 
-The tool can install itself as a systemd user service for automatic startup:
-
-### Install Service
+Enable auto-start on login:
 
 ```bash
 opencode-remote-ctrl install-service
-```
-
-### Uninstall Service
-
-```bash
-opencode-remote-ctrl uninstall-service
-```
-
-### Manual Service Management
-
-```bash
-systemctl --user start opencode-remote-ctrl
-systemctl --user stop opencode-remote-ctrl
-systemctl --user restart opencode-remote-ctrl
-systemctl --user status opencode-remote-ctrl
 ```
 
 ## Logs
@@ -180,35 +150,6 @@ Service logs are stored at:
 View logs:
 ```bash
 tail -f ~/.local/share/opencode-remote-ctrl/service.log
-```
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    opencode-remote-ctrl                       │
-├─────────────────────────────────────────────────────────┤
-│                                                          │
-│  ┌──────────────┐    ┌──────────────┐    ┌────────────┐  │
-│  │     CLI      │    │   Web UI    │    │   Service   │  │
-│  │  (Commands)  │    │   (Config)  │    │  (Systemd)  │  │
-│  └──────┬───────┘    └──────┬───────┘    └──────┬─────┘  │
-│         │                   │                   │         │
-│         └───────────────────┼───────────────────┘         │
-│                             │                             │
-│              ┌──────────────┴──────────────┐              │
-│              │        Config Store        │              │
-│              │  ~/.config/opencode-remote-ctrl/ │              │
-│              └─────────────────────────────┘              │
-│                             │                             │
-│         ┌───────────────────┼───────────────────┐         │
-│         │                   │                   │         │
-│  ┌──────┴───────┐   ┌───────┴───────┐   ┌──────┴──────┐  │
-│  │   Tailscale  │   │  opencode web │   │    Logs     │  │
-│  │     Info     │   │   Service     │   │             │  │
-│  └──────────────┘   └───────────────┘   └─────────────┘  │
-│                                                          │
-└─────────────────────────────────────────────────────────┘
 ```
 
 ## Environment Variables
@@ -253,17 +194,9 @@ tail -f ~/.local/share/opencode-remote-ctrl/service.log
    nc -zv 100.x.y.z 4096
    ```
 
-### Password not working
-
-Make sure you're using the same password you set in the config UI. The password is stored locally and not synced anywhere.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 ## License
 
-MIT License - see LICENSE file for details.
+MIT License
 
 ## Author
 

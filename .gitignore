@@ -21,3 +21,4 @@ Thumbs.db
 
 # Config (keep this if you want to exclude personal config)
 # ~/.config/opencode-remote/config.json
+.npmrc
